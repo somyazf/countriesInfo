@@ -1,9 +1,11 @@
 import React,{Component} from 'react';
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from 'react-router-dom';
+import {Map}from '../_components/map';
+import {Weather}from '../_components/weather';
 import Axios from 'axios';
 import '../_styles/App.scss';
 import world from '../world.svg';
-import Bootstrap from '../_styles/bootstrap-grid.min.css'
+import Bootstrap from '../_styles/bootstrap-grid.min.css';
 
 class Country extends Component {
 
@@ -13,15 +15,8 @@ class Country extends Component {
       this.setState({...response.data})
     })
   }
-
   goBack = ()=>{
     this.props.history.push('/');
-  }
-  getWeather = async () => {
-    const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.capital},${this.state.name}&appid=293de27ff191aaa572d89dc6abcf0caa
-    `);
-    const response = await api_call.json();
-    console.log(response); 
   }
 
   render(){
@@ -33,60 +28,57 @@ class Country extends Component {
           <span>Country Info - {this.state && this.state.name}</span>
           <button onClick={this.goBack}>Back</button>
         </nav>
-        {state ? <main className="container-fluid">
+        {this.state ? <main className="container-fluid">
             <div className="row"> 
                 <div className="col-12 col-lg-4">
-                  <div style={{padding:'25px',borderRadius: '10px',background: 'rgba(61, 78, 171, 0.37)'}}>
+                  <div style={{padding:'25px',borderRadius: '10px',background: 'rgba(61, 78, 171, 0.37)',minHeight: '100%'}}>
                     <div style={{display:'flex',justifyContent:'space-around'}}>
-                      <h3 style={{color: 'white',fontSize: '35px',marginBottom: 0}}>{this.state && this.state.name}</h3>
+                      <h3 style={{color: 'white',fontSize: '25px',marginBottom: 0}}>{this.state && state.name}</h3>
                       <img src={state.flag} className="flag" alt="flag"/>
                     </div>
                     <hr/>
                     <div style={{paddingLeft: '57px'}}><h2 style={{fontSize: '40px',marginTop: '0',color: 'white'}}>{state.capital}</h2></div>
                     <div>
-                      <span onClick={this.getWeather}>icon</span>
-                      <span>temp</span>
+                      <Weather city={state.capital}/>
                     </div>
                   </div>
                 </div>
-                <div className="col-12 col-lg-4"  style={{background: '#ffdc37',padding: 0,textAlign: 'center'}}>
-                  <div style={{background: 'black',color: 'white',textAlign: 'center',padding: '15px'}}>CALLING CODE</div>
-                  <div><h1>{state.callingCodes}</h1></div>
-                </div>
                 <div className="col-12 col-lg-4">
-                  <div style={{background: '#504e4e',color: 'white',height: '100%', padding: '15px'}}>
-                    <div>{state.name}</div>
+                <div style={{padding:'25px',borderRadius: '10px',background: 'rgba(61, 78, 171, 0.37)'}}>
+                    <div style={{color:'#1a07c5',textAlign: 'center',fontSize: '23px'}}>Facts & Figures</div>
                     <div>
                       <ul className="info">
                         <li><span>Native Name:</span> {state.nativeName}</li>
                         <li><span>Capital:</span> {state.capital}</li>
                         <li><span>Region:</span> {state.region}</li>
                         <li><span>Population:</span> {state.population}</li>
-                        <li><span>Languages:</span> {state.languages[0].name}</li>
-                        <li><span>TimeZone:</span> {state.timezones}</li>
+                        <li><span>Languages:</span>{state.languages[0].name}</li>
+                        <li><span>TimeZone:</span> {state.timezones[0]}</li>
+                        <li><span>Calling Code:</span> {state.callingCodes}</li>
                       </ul>
                     </div>
                   </div>
                 </div>
+                <div className="col-12 col-lg-4">
+                  <div style={{borderRadius: '10px',background: 'rgba(61, 78, 171, 0.37)',height: '100%'}}>
+                  <Map lat={state.latlng[0]} long={state.latlng[1]}/>
+                  </div>
+                </div>
             </div>
             <div className="row">
-              <div className="col-lg-4">
-                  <div style={{background: 'black',color: 'white',textAlign: 'center',padding: '15px'}}>Capital Weather Report</div>
-                  <div>
-                    <span><img src="" className="flag" alt="flag"/></span>
-                    <ul className="weather-info">
-                      <li><span>Wind Speed:</span> {state.nativeName}</li>
-                      <li><span>Temprature:</span> {state.capital}</li>
-                      <li><span>Humidity:</span> {state.region}</li>
-                      <li><span>Visibility:</span> {state.population}</li>
-                    </ul>
-                  </div>
-              </div>
-              <div className="col-lg-8">
-              <div style={{background: 'black',color: 'white',height: '100%', padding: '15px'}}>Map</div>
+              <div className="col-lg-12">
+                {state.borders.length > 0 ? <div  style={{borderRadius: '10px',background: 'rgba(61, 78, 171, 0.37)',height: '100%'}}>
+                    <div style={{color:'#1a07c5',textAlign: 'center',fontSize: '23px',padding: '12px 0'}}>Land borders</div>
+                    <div>
+                      <ul className="borders">
+                      {state.borders.map(border=><a href={"/country/"+ border}><p>{border}</p></a>
+                      )}
+                      </ul>
+                    </div>
+                  </div>:null}
               </div>
             </div>
-        </main>: <span>Loading...</span>}
+        </main>: <span style={{color:'#1a07c5',textAlign: 'center',fontSize: '25px'}}>Loading...</span>}
       </div>
     </>
   }

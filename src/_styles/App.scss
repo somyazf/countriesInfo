@@ -20,7 +20,7 @@ body {
 }
 input[type="text"], button{
   border: 1px solid rgb(212, 212, 212);
-  padding: 10px 30px;
+  padding: 12px 30px;
   outline: none;
   background: rgb(250, 251, 252);
 }
@@ -29,7 +29,7 @@ input[type="text"]{
 }
 button{
   border-radius: 0 50px 50px 0;
-  background: linear-gradient(38deg, rgb(116, 174, 233) 15%, rgba(0,212,255,0.9475140397956058) 100%);
+  background: linear-gradient(38deg, #d5e6f6 15%, rgba(233, 251, 255, 0.947514) 100%);
 
 }
 .search-area{
@@ -69,7 +69,6 @@ ul.suggest{
 }
 .countryPage{
   height: 100vh;
-  width: 100vw;
   background-image: url('../../src/blue-mountains.png');
   background-size: cover;
   background-position: center center;
@@ -104,7 +103,32 @@ ul{
 }
 ul li {
   list-style: none;
+  line-height: 30px;
 }
 ul.info li span{
-  color: #ffdc37;
+  color: #fff;
+  padding-right: 6px;
+}
+#wicon{
+  width: 75px;
+  height: 75px;
+}
+ul.borders{
+  display: flex;
+  justify-content: center;
+  >a{
+    display: flex;
+    flex-direction: column;
+    font-size: 30px;
+    padding: 20px 30px;
+    border-right: 2px solid rgba(228, 227, 227, 0.15);
+    text-decoration: none;
+    >p{
+      color: white;
+    }
+    img.flags{
+      width: 100px;
+      height: 100px;
+    }
+  }
 }
