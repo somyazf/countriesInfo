@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, NavLink, Link  } from 'react-router-dom';
 import {Map}from '../_components/map';
 import {Weather}from '../_components/weather';
 import Axios from 'axios';
@@ -8,17 +8,23 @@ import world from '../world.svg';
 import Bootstrap from '../_styles/bootstrap-grid.min.css';
 
 class Country extends Component {
-
   constructor(props){
     super(props);
-    Axios.get('https://restcountries.eu/rest/v2/alpha/' + props.match.params.code).then(response=>{
-      this.setState({...response.data})
+  }
+  getCountry = () => {
+    Axios.get('https://restcountries.eu/rest/v2/alpha/' + this.props.match.params.code).then(response => {
+      this.setState({ ...response.data })
     })
+  }
+  componentDidMount() {
+    this.getCountry();
+  }
+  componentDidUpdate() {
+    this.getCountry();
   }
   goBack = ()=>{
     this.props.history.push('/');
   }
-
   render(){
     const {state} = this;
     return <>
@@ -71,7 +77,8 @@ class Country extends Component {
                     <div style={{color:'#1a07c5',textAlign: 'center',fontSize: '23px',padding: '12px 0'}}>Land borders</div>
                     <div>
                       <ul className="borders">
-                      {state.borders.map(border=><a href={"/country/"+ border}><p>{border}</p></a>
+                      {state.borders.map(border=><Link to={`/country/${border}`}
+                       key={border}><p>{border}</p></Link>
                       )}
                       </ul>
                     </div>
